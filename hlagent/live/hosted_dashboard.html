@@ -1,0 +1,260 @@
+<meta name="dash-one-writer">
+<style>
+.pa { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.pa-head { display: grid; gap: var(--cds-gap-xs); }
+.pa-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.pa-lede { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg); max-width: 70ch; }
+.pa-meta { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.pa-banner { border: 1px solid var(--color-border-line); border-left: 4px solid var(--color-warn); border-radius: var(--cds-radius);
+  padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); background: var(--color-panel); }
+.pa-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--cds-gap-md); }
+.pa-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+.pa-k { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
+.pa-v { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 28px; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+.pa-d { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+.pa-status { display: inline-flex; align-items: center; gap: 6px; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin-top: 4px; }
+.pa-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--color-fg-muted); }
+.pa-dot.ok { background: var(--color-ok); } .pa-dot.warn { background: var(--color-warn); } .pa-dot.bad { background: var(--color-bad); }
+.pa-charts { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--cds-gap-md); }
+@media (max-width: 720px) { .pa-charts { grid-template-columns: minmax(0, 1fr); } }
+.pa-h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-sm); }
+.pa-chart { position: relative; min-height: 240px; }
+.pa-chart svg text { fill: var(--cds-text-secondary); font-size: 11px; font-variant-numeric: tabular-nums; }
+.pa-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border);
+  box-shadow: var(--cds-shadow-popover); border-radius: 6px; padding: 6px 8px; font-size: 12px; white-space: nowrap; z-index: 2; }
+.pa-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: 6px; }
+.pa-sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 5px; vertical-align: -1px; }
+.pa-scroll { overflow-x: auto; }
+.pa-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; min-width: 520px; }
+.pa-table th, .pa-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--color-border-line); font-size: 13px; }
+.pa-table th { color: var(--color-fg-muted); font-weight: 500; font-size: 12px; }
+.pa-table .num { text-align: right; }
+.pa-table td.nw { white-space: nowrap; }
+.pa-pill { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--color-border-line); color: var(--color-fg-muted); }
+.pa-pill.dec { color: var(--color-fg); border-color: var(--color-fg-muted); font-weight: 500; }
+.pa-fail { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: var(--cds-pad-md) 0; }
+[data-dash-source-state=refreshing] { opacity: .5; }
+</style>
+
+<div class="pa">
+  <div class="pa-head" id="summary">
+    <h1 class="pa-title">Play-money trading agent</h1>
+    <p class="pa-lede">The agent is <span data-draw="pnl-dir">—</span> <b data-draw="pnl-abs" data-source="summary" data-field="pnl" data-row="0">—</b> (<span data-draw="pnl-pct" data-source="summary" data-field="pnl_pct" data-row="0">—</span>) since it started with $10,000 of play money, and its risk status is <b data-draw="risk-word" data-source="summary" data-field="risk_status" data-row="0">—</b>.</p>
+    <p class="pa-meta">Snapshot taken <span data-draw="updated" data-source="summary" data-field="updated_utc" data-row="0">—</span> UTC from the agent running in Claude's cloud session. Ask Claude to refresh it.</p>
+  </div>
+
+  <div class="pa-banner" id="banner"><b>Play money only.</b> The agent has no way to place real orders. Its strategy (<span data-draw="strategy" data-source="summary" data-field="strategy" data-row="0">—</span>) is marked <b data-draw="strat-status" data-source="summary" data-field="strategy_status" data-row="0">—</b> because it failed its backtests, so it is expected to lose. This run tests the machinery.</div>
+
+  <div class="pa-tiles" id="tiles">
+    <div class="pa-card" id="tile-equity"><p class="pa-k">Equity</p><p class="pa-v" data-draw="equity" data-source="summary" data-field="equity" data-row="0">—</p><p class="pa-d">Started at $10,000</p></div>
+    <div class="pa-card" id="tile-pnl"><p class="pa-k">Profit or loss</p><p class="pa-v" data-draw="pnl" data-source="summary" data-field="pnl" data-row="0">—</p><p class="pa-d"><span data-draw="pnl-pct2" data-source="summary" data-field="pnl_pct" data-row="0">—</span> since start</p></div>
+    <div class="pa-card" id="tile-costs"><p class="pa-k">Fees paid</p><p class="pa-v" data-draw="fees" data-source="summary" data-field="fees_paid" data-row="0">—</p><p class="pa-d">Funding paid <span data-draw="funding" data-source="summary" data-field="funding_paid" data-row="0">—</span> · fills <span data-draw="fills" data-source="summary" data-field="fills" data-row="0">—</span></p></div>
+    <div class="pa-card" id="tile-risk"><p class="pa-k">Risk status</p><div class="pa-status"><span class="pa-dot" id="risk-dot"></span><span data-draw="risk" data-source="summary" data-field="risk_status" data-row="0">—</span></div><p class="pa-d" data-draw="risk-note" data-source="summary" data-field="risk_note" data-row="0">—</p></div>
+    <div class="pa-card" id="tile-next"><p class="pa-k">Next 4-hour decision</p><p class="pa-v" data-draw="next" data-source="summary" data-field="next_decision_utc" data-row="0">—</p><p class="pa-d">UTC, when the next price bar closes</p></div>
+  </div>
+
+  <div class="pa-charts">
+    <div class="pa-card" id="equity-chart">
+      <h2 class="pa-h2">Equity over time</h2>
+      <div class="pa-chart" data-draw="equity-chart" data-source="equity summary"></div>
+      <div class="pa-legend"><span><span class="pa-sw" style="background: var(--pa-c0)" id="sw-eq"></span>Equity</span>
+        <span><span class="pa-sw" style="background: var(--cds-chart-reference)"></span>Starting $10,000</span>
+        <span>◯ Decision at a 4-hour close</span></div>
+    </div>
+    <div class="pa-card" id="positions-chart">
+      <h2 class="pa-h2">Positions, % of equity</h2>
+      <div class="pa-chart" data-draw="positions-chart" data-source="positions"></div>
+      <div class="pa-legend"><span><span class="pa-sw" id="sw-long"></span>Long</span>
+        <span><span class="pa-sw" id="sw-short"></span>Short</span></div>
+    </div>
+  </div>
+
+  <div class="pa-card" id="holdings">
+    <h2 class="pa-h2">Holdings</h2>
+    <div class="pa-scroll">
+      <table class="pa-table" data-source="positions" data-row-key="coin">
+        <thead><tr><th data-field="coin">Coin</th><th data-field="side">Side</th><th class="num" data-field="size">Size</th>
+          <th class="num" data-field="price">Price</th><th class="num" data-field="value">Value</th><th class="num" data-field="weight_pct">% of equity</th></tr></thead>
+        <tbody data-draw="holdings"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pa-card" id="activity">
+    <h2 class="pa-h2">Recent activity</h2>
+    <div class="pa-scroll">
+      <table class="pa-table" data-source="activity" data-row-key="time_utc" style="min-width: 680px">
+        <thead><tr><th data-field="time_utc">Time (UTC)</th><th data-field="type">Type</th><th class="num" data-field="equity">Equity</th>
+          <th data-field="orders">Orders</th><th data-field="risk_notes">Risk notes</th></tr></thead>
+        <tbody data-draw="activity"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+window.pa = (() => {
+  const money = (v, d = 2) => (v < 0 ? "−$" : "$") + Math.abs(v).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
+  const pct = (v, d = 2) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d) + "%";
+  const time = s => s ? s.slice(5, 16).replace("T", " ") : "—";
+  const row = id => { const r = dash.data(id); return r.status === "ok" && r.data.length ? r.data[0] : null; };
+  return {money, pct, time, row};
+})();
+
+// Scalar drawings from the one-row summary.
+[
+  ["pnl-dir", r => +r.pnl >= 0 ? "up" : "down"],
+  ["pnl-abs", r => pa.money(Math.abs(+r.pnl))],
+  ["pnl-pct", r => pa.pct(+r.pnl_pct)],
+  ["pnl-pct2", r => pa.pct(+r.pnl_pct)],
+  ["risk-word", r => r.risk_status.toLowerCase()],
+  ["updated", r => pa.time(r.updated_utc)],
+  ["strategy", r => r.strategy],
+  ["strat-status", r => r.strategy_status],
+  ["equity", r => pa.money(+r.equity)],
+  ["pnl", r => (+r.pnl >= 0 ? "+" : "") + pa.money(+r.pnl)],
+  ["fees", r => pa.money(+r.fees_paid)],
+  ["funding", r => pa.money(+r.funding_paid)],
+  ["fills", r => String(+r.fills)],
+  ["risk", r => ({Normal: "✓ Normal", Halted: "⏸ Halted", Killed: "✕ Killed"}[r.risk_status] || r.risk_status)],
+  ["risk-note", r => r.risk_note],
+  ["next", r => r.next_decision_utc.slice(11, 16)],
+].forEach(([name, fmt]) => dash.draw(name, el => {
+  const s = dash.data("summary"), r = pa.row("summary");
+  el.textContent = r ? fmt(r) : "—";
+  el.classList.toggle("dash-skeleton", s.status === "loading");
+}));
+
+dash.onData(() => {
+  const r = pa.row("summary");
+  document.querySelectorAll("#risk-dot").forEach(d => {
+    d.classList.toggle("ok", !!r && r.risk_status === "Normal");
+    d.classList.toggle("warn", !!r && r.risk_status === "Halted");
+    d.classList.toggle("bad", !!r && r.risk_status === "Killed");
+  });
+  document.querySelectorAll("#sw-eq").forEach(e => e.style.background = dash.colors[0]);
+  document.querySelectorAll("#sw-long").forEach(e => e.style.background = dash.colors[0]);
+  document.querySelectorAll("#sw-short").forEach(e => e.style.background = "var(--cds-chart-status-critical)");
+});
+
+dash.draw("equity-chart", el => {
+  const d = dash.data("equity"), s = pa.row("summary");
+  el.replaceChildren();
+  if (d.status === "error") { const p = document.createElement("p"); p.className = "pa-fail"; p.textContent = "Failed to load"; el.append(p); return; }
+  if (d.status !== "ok" || !d.data.length) { el.textContent = "—"; return; }
+  const pts = d.data.map(r => ({t: new Date(r.time_utc), v: +r.equity, dec: r.event === "decision"}));
+  const start = s ? +s.start_equity : 10000;
+  const W = el.clientWidth || 600, H = 240, m = {l: 8, r: 16, t: 14, b: 24};
+  const svg = d3.select(el).append("svg").attr("width", "100%").attr("height", H).attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("role", "img").attr("aria-label", `Equity from ${pa.money(pts[0].v)} to ${pa.money(pts[pts.length - 1].v)}, starting balance ${pa.money(start)}`);
+  const lo = d3.min(pts, p => p.v), hi = d3.max(pts, p => p.v);
+  const y0 = Math.min(lo, start), y1 = Math.max(hi, start), pad = Math.max((y1 - y0) * 0.15, 5);
+  const y = d3.scaleLinear().domain([y0 - pad, y1 + pad]).range([H - m.b, m.t]).nice();
+  const yt = y.ticks(4);
+  const probe = svg.append("text").text(yt.map(v => "$" + d3.format(",")(v)).sort((a, b) => b.length - a.length)[0]);
+  m.l = probe.node().getComputedTextLength() + 12; probe.remove();
+  const t0 = pts[0].t, t1 = pts.length > 1 ? pts[pts.length - 1].t : new Date(+t0 + 3600e3);
+  const x = d3.scaleUtc().domain([t0, t1]).range([m.l, W - m.r]);
+  svg.append("g").selectAll("line").data(yt).join("line").attr("x1", m.l).attr("x2", W - m.r)
+    .attr("y1", v => y(v)).attr("y2", v => y(v)).style("stroke", "var(--cds-chart-grid)");
+  svg.append("g").selectAll("text").data(yt).join("text").attr("x", m.l - 6).attr("y", v => y(v) + 4)
+    .attr("text-anchor", "end").text(v => "$" + d3.format(",")(v));
+  const nx = Math.max(2, Math.min(5, Math.floor((W - m.l) / 120)));
+  svg.append("g").selectAll("text").data(x.ticks(nx)).join("text").attr("x", t => x(t)).attr("y", H - 6)
+    .attr("text-anchor", "middle").text(d3.utcFormat("%H:%M"));
+  svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(start)).attr("y2", y(start))
+    .style("stroke", "var(--cds-chart-reference)").attr("stroke-dasharray", "4 4");
+  svg.append("path").datum(pts).attr("fill", "none").style("stroke", dash.colors[0]).attr("stroke-width", 2)
+    .attr("stroke-linejoin", "round").attr("d", d3.line().x(p => x(p.t)).y(p => y(p.v)));
+  svg.append("g").selectAll("circle").data(pts.filter(p => p.dec)).join("circle").attr("cx", p => x(p.t)).attr("cy", p => y(p.v))
+    .attr("r", 4.5).style("fill", "var(--color-panel)").style("stroke", dash.colors[0]).attr("stroke-width", 2);
+  const last = pts[pts.length - 1], left = x(last.t) < (m.l + W - m.r) / 2;
+  svg.append("text").attr("x", x(last.t) + (left ? 8 : -6)).attr("y", y(last.v) - 9).attr("text-anchor", left ? "start" : "end")
+    .style("fill", "var(--color-fg)").style("font-weight", 600).text(pa.money(last.v));
+  const vline = svg.append("line").attr("y1", m.t).attr("y2", H - m.b).style("stroke", "var(--cds-chart-axis)").attr("visibility", "hidden");
+  const dot = svg.append("circle").attr("r", 5).style("fill", dash.colors[0]).style("stroke", "var(--color-panel)").attr("stroke-width", 2).attr("visibility", "hidden");
+  const tip = d3.select(el).append("div").attr("class", "pa-tip").style("display", "none");
+  svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", ev => {
+      const [mx] = d3.pointer(ev), t = x.invert(mx);
+      const p = pts[d3.leastIndex(pts, q => Math.abs(q.t - t))];
+      vline.attr("x1", x(p.t)).attr("x2", x(p.t)).attr("visibility", "visible");
+      dot.attr("cx", x(p.t)).attr("cy", y(p.v)).attr("visibility", "visible");
+      tip.style("display", "block").selectAll("*").remove();
+      tip.append("b").text(pa.money(p.v));
+      tip.append("span").style("color", "var(--cds-text-secondary)").text(" " + pa.pct((p.v / start - 1) * 100));
+      tip.append("br");
+      tip.append("span").style("color", "var(--cds-text-secondary)").text(d3.utcFormat("%b %d %H:%M UTC")(p.t) + (p.dec ? " · decision" : ""));
+      const tw = tip.node().offsetWidth;
+      tip.style("left", Math.min(x(p.t) + 12, W - tw - 4) + "px").style("top", Math.max(0, y(p.v) - 48) + "px");
+    })
+    .on("pointerleave", () => { tip.style("display", "none"); vline.attr("visibility", "hidden"); dot.attr("visibility", "hidden"); });
+});
+
+dash.draw("positions-chart", el => {
+  const d = dash.data("positions");
+  el.replaceChildren();
+  if (d.status === "error") { const p = document.createElement("p"); p.className = "pa-fail"; p.textContent = "Failed to load"; el.append(p); return; }
+  if (d.status !== "ok" || !d.data.length) { el.textContent = "—"; return; }
+  const rows = d.data.map(r => ({coin: r.coin, w: +r.weight_pct, side: r.side}));
+  const W = el.clientWidth || 300, rowH = 40, m = {l: 48, r: 52, t: 6, b: 6}, H = m.t + m.b + rowH * rows.length;
+  const maxAbs = Math.max(50, d3.max(rows, r => Math.abs(r.w)));
+  const mid = m.l + (W - m.l - m.r) / 2, half = (W - m.l - m.r) / 2;
+  const svg = d3.select(el).append("svg").attr("width", "100%").attr("height", H).attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("role", "img").attr("aria-label", rows.map(r => `${r.coin} ${pa.pct(r.w, 0)}`).join(", "));
+  svg.append("line").attr("x1", mid).attr("x2", mid).attr("y1", m.t).attr("y2", H - m.b).style("stroke", "var(--cds-chart-axis)");
+  const tip = d3.select(el).append("div").attr("class", "pa-tip").style("display", "none");
+  rows.forEach((r, i) => {
+    const yy = m.t + i * rowH, bh = 22, len = Math.abs(r.w) / maxAbs * half;
+    svg.append("text").attr("x", m.l - 8).attr("y", yy + rowH / 2 + 4).attr("text-anchor", "end").text(r.coin);
+    if (len > 0.5) {
+      const rad = Math.min(4, len / 2), top = yy + (rowH - bh) / 2;
+      const path = r.w >= 0
+        ? `M${mid + 1},${top} h${len - rad} q${rad},0 ${rad},${rad} v${bh - 2 * rad} q0,${rad} -${rad},${rad} h-${len - rad} z`
+        : `M${mid - 1},${top} h-${len - rad} q-${rad},0 -${rad},${rad} v${bh - 2 * rad} q0,${rad} ${rad},${rad} h${len - rad} z`;
+      svg.append("path").attr("d", path).style("fill", r.w >= 0 ? dash.colors[0] : "var(--cds-chart-status-critical)");
+    }
+    svg.append("text").attr("x", r.w >= 0 ? mid + len + 6 : mid - len - 6).attr("y", yy + rowH / 2 + 4)
+      .attr("text-anchor", r.w >= 0 ? "start" : "end").style("fill", "var(--color-fg)").text(r.w === 0 ? "0%" : pa.pct(r.w, 0));
+    svg.append("rect").attr("x", 0).attr("y", yy).attr("width", W).attr("height", rowH).attr("fill", "transparent")
+      .on("pointermove", ev => {
+        const [mx] = d3.pointer(ev);
+        tip.style("display", "block").selectAll("*").remove();
+        tip.append("b").text(r.coin + " ");
+        tip.append("span").text(r.side.toLowerCase());
+        tip.append("br");
+        tip.append("span").style("color", "var(--cds-text-secondary)").text(pa.pct(r.w, 1) + " of equity");
+        const tw = tip.node().offsetWidth;
+        tip.style("left", Math.min(mx + 12, W - tw - 4) + "px").style("top", Math.max(0, yy - 8) + "px");
+      })
+      .on("pointerleave", () => tip.style("display", "none"));
+  });
+});
+
+dash.draw("holdings", tb => {
+  const d = dash.data("positions");
+  tb.replaceChildren();
+  if (d.status !== "ok") return;
+  d.data.forEach(r => {
+    const tr = tb.insertRow(), px = +r.price;
+    [[r.coin, ""], [r.side, ""], [(+r.size).toLocaleString("en-US", {maximumFractionDigits: 5}), "num"],
+     [pa.money(px, px < 10 ? 4 : 2), "num"], [pa.money(+r.value), "num"], [pa.pct(+r.weight_pct, 1), "num"]]
+      .forEach(([v, c]) => { const td = tr.insertCell(); td.textContent = v; if (c) td.className = c; });
+  });
+});
+
+dash.draw("activity", tb => {
+  const d = dash.data("activity");
+  tb.replaceChildren();
+  if (d.status !== "ok") return;
+  d.data.forEach(r => {
+    const tr = tb.insertRow();
+    const t = tr.insertCell(); t.textContent = pa.time(r.time_utc); t.className = "nw";
+    const ty = tr.insertCell(); ty.className = "nw";
+    const pill = document.createElement("span"); pill.className = "pa-pill" + (r.type === "Decision" ? " dec" : ""); pill.textContent = r.type; ty.append(pill);
+    const e = tr.insertCell(); e.textContent = pa.money(+r.equity); e.className = "num";
+    tr.insertCell().textContent = r.orders || "none";
+    tr.insertCell().textContent = r.risk_notes || "ok";
+  });
+});
+</script>
