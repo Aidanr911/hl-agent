@@ -53,3 +53,12 @@ docs/REPORT.md      results, bear case, "How could this system fail?"
 ```
 
 Not financial advice.
+
+## Dashboard
+
+```bash
+python3 -m hlagent.live.dashboard --port 8765   # then open http://localhost:8765
+```
+
+Read-only page: equity curve, positions, holdings, risk status, next decision and recent activity.
+Refreshes every 15 seconds from `state/`.
