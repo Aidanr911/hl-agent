@@ -1,0 +1,68 @@
+{
+  "files": {
+    "candles.csv": {
+      "bytes": 376101,
+      "sha256": "76132f73e582f244ec36c36f525e0ab597ca42f7ac9c2cbad7208d1bd93dc7ac"
+    },
+    "funding.csv": {
+      "bytes": 786644,
+      "sha256": "cec1e04be64fcee8a1cbdaedc7aff2c26c7fda24020c583d2e315616a4ada243"
+    },
+    "sources.json": {
+      "bytes": 4071126,
+      "sha256": "a9f117114f48f215ab1fbb3ddb33e50b30cbb3735e57c7967be2675e99611ca9"
+    }
+  },
+  "limitations": [
+    "Hashes prove local consistency, not exchange authenticity or an unchanged provider history.",
+    "Complete coverage is not strategy validation, Risk PASS, approval, or execution readiness.",
+    "Funding rates alone cannot prove dollar funding costs without historical oracle prices and position sizes.",
+    "Current metadata is not a survivorship-free universe; absent markets remain unavailable."
+  ],
+  "mode": "read-only",
+  "parameters": {
+    "as_of_ms": 1794516099377,
+    "base_url": "https://api.hyperliquid.xyz",
+    "coin": "DOGE",
+    "dex": null,
+    "end_ms": 1794441600000,
+    "interval": "4h",
+    "max_pages": 250,
+    "network": "mainnet",
+    "start_ms": 1730419200000,
+    "with_funding": true
+  },
+  "result": {
+    "candles_excluded_outside_window": 0,
+    "coverage": {
+      "candles": {
+        "complete": true,
+        "expected": 4446,
+        "first_ms": 1730419200000,
+        "last_ms": 1794427200000,
+        "missing_ranges": [],
+        "observed": 4446
+      },
+      "funding": {
+        "complete": true,
+        "expected": 17784,
+        "first_ms": 1730419200000,
+        "last_ms": 1794438000000,
+        "missing_ranges": [],
+        "observed": 17784
+      }
+    },
+    "duplicates_removed": {
+      "candles": 0,
+      "funding": 35
+    },
+    "issues": [],
+    "market": {
+      "coin": "DOGE",
+      "dex": null,
+      "is_delisted": false
+    },
+    "status": "complete"
+  },
+  "schema_version": 1
+}
